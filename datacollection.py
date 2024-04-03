@@ -1,5 +1,5 @@
 '''
-To run this project, I had to run
+To run the code in this file, make sure to run these first:
 pip install librosa
 pip install librosa soundfile
 pip install setuptools
