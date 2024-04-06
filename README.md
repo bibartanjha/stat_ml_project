@@ -23,3 +23,13 @@ I ran the code, and it created 3 datasets
 We can use any of the 3 datasets above in our future code for our ML models. 
 
 I've also written some basic python code in modeltraining/modeltraining.py. Ideally, our ML model training code will go in this file.
+
+
+### April 6th from Laurenz
+Initial Model structure is there.
+
+- ModelEvaluator class that takes a list of models to evaluate and data.
+- Each model must be a BaseModel implementation. 
+- BaseModel take a model that needs to implement the fit() and predict() methods.
+
+See modeltraining.py for an example how to use it. 
