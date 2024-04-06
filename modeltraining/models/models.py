@@ -1,11 +1,17 @@
 import time
 import matplotlib.pyplot as plt
 import numpy as np
-from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import LabelEncoder
-from sklearn.linear_model import LinearRegression, LogisticRegression
+from sklearn.linear_model import LinearRegression, LogisticRegression, Lasso, Ridge, ElasticNet, ElasticNetCV
+from sklearn.svm import SVC, SVR, LinearSVC
+from sklearn.tree import DecisionTreeClassifier, ExtraTreeClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+from sklearn.cluster import KMeans
+from sklearn.mixture import GaussianMixture
 from sklearn.metrics import mean_squared_error
-from sklearn.svm import SVC
+from keras.models import Sequential
+from keras.layers import Dense, SimpleRNN, LSTM, GRU
 
 
 class BaseModel:
@@ -81,7 +87,7 @@ class LinearRegressionModel(BaseModel):
 
 class LogisticRegressionModel(BaseModel):
     def __init__(self, X_train, X_test, y_train, y_test):
-        super().__init__(LogisticRegression(), X_train, X_test, y_train, y_test)
+        super().__init__(LogisticRegression(max_iter=500), X_train, X_test, y_train, y_test)
 
 
 class RandomForestClassifierModel(BaseModel):
@@ -92,3 +98,103 @@ class RandomForestClassifierModel(BaseModel):
 class SVCModel(BaseModel):
     def __init__(self, X_train, X_test, y_train, y_test):
         super().__init__(SVC(), X_train, X_test, y_train, y_test)
+
+
+class LassoModel(BaseModel):
+    def __init__(self, X_train, X_test, y_train, y_test):
+        super().__init__(Lasso(), X_train, X_test, y_train, y_test)
+
+
+class RidgeModel(BaseModel):
+    def __init__(self, X_train, X_test, y_train, y_test):
+        super().__init__(Ridge(), X_train, X_test, y_train, y_test)
+
+
+class ElasticNetModel(BaseModel):
+    def __init__(self, X_train, X_test, y_train, y_test):
+        super().__init__(ElasticNet(), X_train, X_test, y_train, y_test)
+
+
+class ElasticNetCVModel(BaseModel):
+    def __init__(self, X_train, X_test, y_train, y_test):
+        super().__init__(ElasticNetCV(), X_train, X_test, y_train, y_test)
+
+
+class SVRModel(BaseModel):
+    def __init__(self, X_train, X_test, y_train, y_test):
+        super().__init__(SVR(), X_train, X_test, y_train, y_test)
+
+
+class LinearSVCModel(BaseModel):
+    def __init__(self, X_train, X_test, y_train, y_test):
+        super().__init__(LinearSVC(), X_train, X_test, y_train, y_test)
+
+
+class DecisionTreeClassifierModel(BaseModel):
+    def __init__(self, X_train, X_test, y_train, y_test):
+        super().__init__(DecisionTreeClassifier(), X_train, X_test, y_train, y_test)
+
+
+class ExtraTreeClassifierModel(BaseModel):
+    def __init__(self, X_train, X_test, y_train, y_test):
+        super().__init__(ExtraTreeClassifier(), X_train, X_test, y_train, y_test)
+
+
+class KNeighborsClassifierModel(BaseModel):
+    def __init__(self, X_train, X_test, y_train, y_test):
+        super().__init__(KNeighborsClassifier(), X_train, X_test, y_train, y_test)
+
+
+class GradientBoostingClassifierModel(BaseModel):
+    def __init__(self, X_train, X_test, y_train, y_test):
+        super().__init__(GradientBoostingClassifier(), X_train, X_test, y_train, y_test)
+
+
+class KMeansModel(BaseModel):
+    def __init__(self, X_train, X_test, y_train, y_test):
+        super().__init__(KMeans(), X_train, X_test, y_train, y_test)
+
+
+class GaussianMixtureModel(BaseModel):
+    def __init__(self, X_train, X_test, y_train, y_test):
+        super().__init__(GaussianMixture(), X_train, X_test, y_train, y_test)
+
+
+class DenseModel(BaseModel):
+    def __init__(self, X_train, X_test, y_train, y_test):
+        model = Sequential()
+        model.add(Dense(128, activation='relu', input_shape=(X_train.shape[1],)))
+        model.add(Dense(64, activation='relu'))
+        model.add(Dense(1, activation='sigmoid'))
+        model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+        super().__init__(model, X_train, X_test, y_train, y_test)
+
+
+class RNNModel(BaseModel):
+    def __init__(self, X_train, X_test, y_train, y_test):
+        model = Sequential()
+        model.add(SimpleRNN(128, activation='relu', input_shape=(X_train.shape[1], 1)))
+        model.add(Dense(64, activation='relu'))
+        model.add(Dense(1, activation='sigmoid'))
+        model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+        super().__init__(model, X_train, X_test, y_train, y_test)
+
+
+class LSTMModel(BaseModel):
+    def __init__(self, X_train, X_test, y_train, y_test):
+        model = Sequential()
+        model.add(LSTM(128, activation='relu', input_shape=(X_train.shape[1], 1)))
+        model.add(Dense(64, activation='relu'))
+        model.add(Dense(1, activation='sigmoid'))
+        model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+        super().__init__(model, X_train, X_test, y_train, y_test)
+
+
+class GRUModel(BaseModel):
+    def __init__(self, X_train, X_test, y_train, y_test):
+        model = Sequential()
+        model.add(GRU(128, activation='relu', input_shape=(X_train.shape[1], 1)))
+        model.add(Dense(64, activation='relu'))
+        model.add(Dense(1, activation='sigmoid'))
+        model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+        super().__init__(model, X_train, X_test, y_train, y_test)
