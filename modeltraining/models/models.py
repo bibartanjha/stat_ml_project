@@ -88,7 +88,7 @@ class LinearRegressionModel(BaseModel):
 
 class LogisticRegressionModel(BaseModel):
     def __init__(self, X_train, X_test, y_train, y_test, identifier):
-        super().__init__(LogisticRegression(max_iter=15000), X_train, X_test, y_train, y_test, identifier)
+        super().__init__(LogisticRegression(max_iter=1500), X_train, X_test, y_train, y_test, identifier)
 
 
 class RandomForestClassifierModel(BaseModel):
