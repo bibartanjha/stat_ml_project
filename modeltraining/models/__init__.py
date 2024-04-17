@@ -1,19 +1,37 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 from .models import (
     LinearRegressionModel, LogisticRegressionModel, RandomForestClassifierModel, SVCModel,
     LassoModel, RidgeModel, ElasticNetModel, ElasticNetCVModel, SVRModel, LinearSVCModel,
     DecisionTreeClassifierModel, ExtraTreeClassifierModel, KNeighborsClassifierModel,
-    GradientBoostingClassifierModel, KMeansModel, GaussianMixtureModel, DenseModel, RNNModel,
-    LSTMModel, GRUModel
+    GradientBoostingClassifierModel, KMeansModel, GaussianMixtureModel,
+    # DenseModel, RNNModel,
+    # LSTMModel, GRUModel
 )
 
 
 class ModelEvaluator:
     def __init__(self, models, X, y, test_size=0.2, random_state=42):
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=random_state)
-        self.models = [model(X_train, X_test, y_train, y_test) for model in models]  # Initialize models
+        scaler = preprocessing.StandardScaler().fit(X_train)
+        X_train_scaled = scaler.transform(X_train)
+        X_test_scaled = scaler.transform(X_test)
+        self.models = [model(X_train_scaled, X_test_scaled, y_train, y_test, 'StandardScaler') for model in models]
+        scaler = preprocessing.MinMaxScaler().fit(X_train)
+        X_train_scaled = scaler.transform(X_train)
+        X_test_scaled = scaler.transform(X_test)
+        self.models += [model(X_train_scaled, X_test_scaled, y_train, y_test, 'MinMaxScaler') for model in models]
+        scaler = preprocessing.MaxAbsScaler().fit(X_train)
+        X_train_scaled = scaler.transform(X_train)
+        X_test_scaled = scaler.transform(X_test)
+        self.models += [model(X_train_scaled, X_test_scaled, y_train, y_test, 'MaxAbsScaler') for model in models]
+        scaler = preprocessing.RobustScaler().fit(X_train)
+        X_train_scaled = scaler.transform(X_train)
+        X_test_scaled = scaler.transform(X_test)
+        self.models += [model(X_train_scaled, X_test_scaled, y_train, y_test, 'RobustScaler') for model in models]
+
         self.results = []
 
     def evaluate_models(self):
@@ -21,7 +39,7 @@ class ModelEvaluator:
             test_accuracy, test_mse = model.evaluate()
             train_accuracy, train_mse = model.evaluate(model.X_train, model.y_train)
             self.results.append({
-                'model': model.__class__.__name__,
+                'model': model.__class__.__name__ + ' ' + model.identifier,
                 'accuracy': model.accuracy(),
                 'test_accuracy': test_accuracy,
                 'train_accuracy': train_accuracy,
@@ -32,7 +50,7 @@ class ModelEvaluator:
                 'prediction_time': model.prediction_performance()
             })
 
-    def plot_results(self, accuracy=True, mse=True, training_time=True, prediction_time=True):
+    def plot_results(self, accuracy=True, mse=True, training_time=True, prediction_time=True, name=''):
         self.results.sort(key=lambda x: x['test_accuracy'])
         model_names = [result['model'] for result in self.results]
         accuracies = [result['accuracy'] for result in self.results]
@@ -61,7 +79,7 @@ class ModelEvaluator:
 
             plt.xlabel('Models')
             plt.ylabel('Accuracy')
-            plt.title('Accuracy Metrics for Different Models')
+            plt.title(f'Accuracy Metrics - {name}')
             plt.xticks(index + bar_width, model_names, rotation=45, ha='right')
             plt.legend()
             plt.grid(True)
@@ -76,7 +94,7 @@ class ModelEvaluator:
             plt.bar(index + 2 * bar_width, train_mses, bar_width, label='Train MSE', color='orange')
             plt.xlabel('Models')
             plt.ylabel('MSE')
-            plt.title('Mean Squared Error Metrics for Different Models')
+            plt.title(f'Mean Squared Error Metrics - {name}')
             plt.xticks(index + bar_width, model_names, rotation=45, ha='right')
             plt.legend()
             plt.grid(True)
@@ -89,7 +107,7 @@ class ModelEvaluator:
             plt.bar(model_names, training_times, color='blue')
             plt.xlabel('Models')
             plt.ylabel('Training Time (seconds)')
-            plt.title('Training Time for Different Models')
+            plt.title(f'Training Time - {name}')
             plt.xticks(rotation=45, ha='right')
             plt.tight_layout()
             plt.show()
@@ -100,7 +118,7 @@ class ModelEvaluator:
             plt.bar(model_names, prediction_times, color='green')
             plt.xlabel('Models')
             plt.ylabel('Prediction Time (seconds)')
-            plt.title('Prediction Time for Different Models')
+            plt.title(f'Prediction Time - {name}')
             plt.xticks(rotation=45, ha='right')
             plt.tight_layout()
             plt.show()
