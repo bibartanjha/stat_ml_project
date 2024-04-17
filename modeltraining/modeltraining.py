@@ -28,7 +28,7 @@ if __name__ == '__main__':
         # DenseModel, RNNModel, LSTMModel, GRUModel
     ], X=X, y=y, test_size=0.3, random_state=50)
     me.evaluate_models()
-    me.plot_results(accuracy=True, mse=False, training_time=False, prediction_time=False)
+    me.plot_results(accuracy=True, mse=False, training_time=False, prediction_time=False, name='Original')
 
     data = pd.read_csv(
         "../feature_extraction/dataForHarmonicAudio.csv",
@@ -45,7 +45,7 @@ if __name__ == '__main__':
         # DenseModel, RNNModel, LSTMModel, GRUModel
     ], X=X, y=y, test_size=0.3, random_state=50)
     me.evaluate_models()
-    me.plot_results(accuracy=True, mse=False, training_time=False, prediction_time=False)
+    me.plot_results(accuracy=True, mse=False, training_time=False, prediction_time=False, name='HarmonicAudio')
 
     data = pd.read_csv(
         "../feature_extraction/dataForMFCCDeltas.csv",
@@ -61,7 +61,7 @@ if __name__ == '__main__':
         # DenseModel, RNNModel, LSTMModel, GRUModel
     ], X=X, y=y, test_size=0.3, random_state=50)
     me.evaluate_models()
-    me.plot_results(accuracy=True, mse=False, training_time=False, prediction_time=False)
+    me.plot_results(accuracy=True, mse=False, training_time=False, prediction_time=False, name='MFCCDeltas')
 
     print('done')
 
