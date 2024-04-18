@@ -15,8 +15,7 @@ from sklearn.metrics import mean_squared_error
 
 
 class BaseModel:
-    def __init__(self, model, X_train, X_test, y_train, y_test, identifier):
-        self.identifier = identifier
+    def __init__(self, model, X_train, X_test, y_train, y_test):
         self.model = model
         self.X_train = X_train
         self.X_test = X_test
@@ -82,83 +81,89 @@ class BaseModel:
 
 
 class LinearRegressionModel(BaseModel):
-    def __init__(self, X_train, X_test, y_train, y_test, identifier):
-        super().__init__(LinearRegression(), X_train, X_test, y_train, y_test, identifier)
+    def __init__(self, X_train, X_test, y_train, y_test):
+        super().__init__(LinearRegression(), X_train, X_test, y_train, y_test)
 
 
 class LogisticRegressionModel(BaseModel):
-    def __init__(self, X_train, X_test, y_train, y_test, identifier):
-        super().__init__(LogisticRegression(max_iter=1500), X_train, X_test, y_train, y_test, identifier)
+    def __init__(self, X_train, X_test, y_train, y_test):
+        super().__init__(LogisticRegression(max_iter=1500), X_train, X_test, y_train, y_test)
 
 
 class RandomForestClassifierModel(BaseModel):
-    def __init__(self, X_train, X_test, y_train, y_test, identifier):
-        super().__init__(RandomForestClassifier(), X_train, X_test, y_train, y_test, identifier)
+    def __init__(self, X_train, X_test, y_train, y_test):
+        super().__init__(
+            RandomForestClassifier(**{
+                'max_depth': 20, 'max_features': 4, 'min_samples_leaf': 1, 'min_samples_split': 5, 'n_estimators': 500
+            }), X_train, X_test, y_train, y_test
+        )
 
 
 class SVCModel(BaseModel):
-    def __init__(self, X_train, X_test, y_train, y_test, identifier):
-        super().__init__(SVC(), X_train, X_test, y_train, y_test, identifier)
+    def __init__(self, X_train, X_test, y_train, y_test):
+        super().__init__(SVC(kernel='linear', degree=3, C=16, random_state=42), X_train, X_test, y_train, y_test)
 
 
 class LassoModel(BaseModel):
-    def __init__(self, X_train, X_test, y_train, y_test, identifier):
-        super().__init__(Lasso(), X_train, X_test, y_train, y_test, identifier)
+    def __init__(self, X_train, X_test, y_train, y_test):
+        super().__init__(Lasso(), X_train, X_test, y_train, y_test)
 
 
 class RidgeModel(BaseModel):
-    def __init__(self, X_train, X_test, y_train, y_test, identifier):
-        super().__init__(Ridge(), X_train, X_test, y_train, y_test, identifier)
+    def __init__(self, X_train, X_test, y_train, y_test):
+        super().__init__(Ridge(), X_train, X_test, y_train, y_test)
 
 
 class ElasticNetModel(BaseModel):
-    def __init__(self, X_train, X_test, y_train, y_test, identifier):
-        super().__init__(ElasticNet(), X_train, X_test, y_train, y_test, identifier)
+    def __init__(self, X_train, X_test, y_train, y_test):
+        super().__init__(ElasticNet(), X_train, X_test, y_train, y_test)
 
 
 class ElasticNetCVModel(BaseModel):
-    def __init__(self, X_train, X_test, y_train, y_test, identifier):
-        super().__init__(ElasticNetCV(), X_train, X_test, y_train, y_test, identifier)
+    def __init__(self, X_train, X_test, y_train, y_test):
+        super().__init__(ElasticNetCV(), X_train, X_test, y_train, y_test)
 
 
 class SVRModel(BaseModel):
-    def __init__(self, X_train, X_test, y_train, y_test, identifier):
-        super().__init__(SVR(), X_train, X_test, y_train, y_test, identifier)
+    def __init__(self, X_train, X_test, y_train, y_test):
+        super().__init__(SVR(), X_train, X_test, y_train, y_test)
 
 
 class LinearSVCModel(BaseModel):
-    def __init__(self, X_train, X_test, y_train, y_test, identifier):
-        super().__init__(LinearSVC(), X_train, X_test, y_train, y_test, identifier)
+    def __init__(self, X_train, X_test, y_train, y_test):
+        super().__init__(LinearSVC(), X_train, X_test, y_train, y_test)
 
 
 class DecisionTreeClassifierModel(BaseModel):
-    def __init__(self, X_train, X_test, y_train, y_test, identifier):
-        super().__init__(DecisionTreeClassifier(), X_train, X_test, y_train, y_test, identifier)
+    def __init__(self, X_train, X_test, y_train, y_test):
+        super().__init__(DecisionTreeClassifier(
+            **{'criterion': 'gini', 'max_depth': None, 'min_samples_leaf': 4, 'min_samples_split': 10}
+        ), X_train, X_test, y_train, y_test)
 
 
 class ExtraTreeClassifierModel(BaseModel):
-    def __init__(self, X_train, X_test, y_train, y_test, identifier):
-        super().__init__(ExtraTreeClassifier(), X_train, X_test, y_train, y_test, identifier)
+    def __init__(self, X_train, X_test, y_train, y_test):
+        super().__init__(ExtraTreeClassifier(), X_train, X_test, y_train, y_test)
 
 
 class KNeighborsClassifierModel(BaseModel):
-    def __init__(self, X_train, X_test, y_train, y_test, identifier):
-        super().__init__(KNeighborsClassifier(), X_train, X_test, y_train, y_test, identifier)
+    def __init__(self, X_train, X_test, y_train, y_test):
+        super().__init__(KNeighborsClassifier(), X_train, X_test, y_train, y_test)
 
 
 class GradientBoostingClassifierModel(BaseModel):
-    def __init__(self, X_train, X_test, y_train, y_test, identifier):
-        super().__init__(GradientBoostingClassifier(), X_train, X_test, y_train, y_test, identifier)
+    def __init__(self, X_train, X_test, y_train, y_test):
+        super().__init__(GradientBoostingClassifier(), X_train, X_test, y_train, y_test)
 
 
 class KMeansModel(BaseModel):
-    def __init__(self, X_train, X_test, y_train, y_test, identifier):
-        super().__init__(KMeans(), X_train, X_test, y_train, y_test, identifier)
+    def __init__(self, X_train, X_test, y_train, y_test):
+        super().__init__(KMeans(), X_train, X_test, y_train, y_test)
 
 
 class GaussianMixtureModel(BaseModel):
-    def __init__(self, X_train, X_test, y_train, y_test, identifier):
-        super().__init__(GaussianMixture(), X_train, X_test, y_train, y_test, identifier)
+    def __init__(self, X_train, X_test, y_train, y_test):
+        super().__init__(GaussianMixture(), X_train, X_test, y_train, y_test)
 
 #
 # class DenseModel(BaseModel):
