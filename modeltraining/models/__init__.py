@@ -94,7 +94,7 @@ class ModelEvaluator:
 
     def plot_results(self, accuracy=True, mse=True, training_time=True, prediction_time=True):
         self.results.sort(key=lambda x: x['test_accuracy'])
-        best_results = self.results
+        best_results = self.results[-20:]
         model_names = [result['model'] for result in best_results]
         accuracies = [result['accuracy'] for result in best_results]
         test_accuracies = [result['test_accuracy'] for result in best_results]

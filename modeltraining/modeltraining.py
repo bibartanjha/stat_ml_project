@@ -35,7 +35,7 @@ if __name__ == '__main__':
         preprocessing.StandardScaler, preprocessing.MinMaxScaler,
         preprocessing.MaxAbsScaler, preprocessing.RobustScaler
     ]
-    best_results, results = eval_models('../allDataSets/dataOrigFromLibrosa/preprocessingOutputCSVs/SomeGenres', SCALERS)
+    best_results, results = eval_models('../allDataSets/dataOrigFromLibrosa/preprocessingOutputCSVs/AllGenres', SCALERS)
     for res in results:
         print(res)
     print('done')
